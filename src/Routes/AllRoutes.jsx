@@ -4,9 +4,9 @@ import Home from "../components/Home"; // Client homepage
 import SignUpTabs from "../components/Auth/SignUpTabs"; // Sign-up component
 import LoginPage from "../components/Auth/LoginModal"; // Login component
 import PrivateRoute from "./PrivateRoute"; // Route protection
-import ClientHome from "../components/ClientHome"; // Client home page with records
-import TranslatorHome from "../components/TranslatorHome"; // Translator orders page
-import OrderFormModal from "../components/OrderFormModal"; // Modal for new order
+import ClientHome from "../components/Client/ClientHome"; // Client home page with records
+import TranslatorHome from "../components/Translator/TranslatorHome"; // Translator orders page
+import HomeRoute from "./HomeRoute";
 
 const AllRoutes = () => {
   return (
@@ -15,9 +15,7 @@ const AllRoutes = () => {
         <Route
           path="/"
           element={
-            <PrivateRoute>
-              <Home />
-            </PrivateRoute>
+            <HomeRoute />
           }
         />
         <Route

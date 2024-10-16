@@ -3,18 +3,18 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 const HomeRoute = () => {
-  const { currentUser } = useAuth();
+  const { currentUser, userData } = useAuth();
 
   if (!currentUser) {
     return <Navigate to="/login" />;
   }
-  if(currentUser.role === "client"){
-    return <Navigate to="/home" />
+  if(userData.role === "client"){
+    return <Navigate to="/client-home" />
   }
-  if (currentUser.role==="translator") {
-    return <Navigate to="/dashboard" />;
+  if (userData.role==="translator") {
+    return <Navigate to="/translator-home" />;
   }
-  return <Navigate to="/home" />
+  return <Navigate to="/login" />
 };
 
 export default HomeRoute;
