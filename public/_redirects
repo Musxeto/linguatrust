@@ -1,0 +1,14 @@
+# Redirect from old paths to new ones (if applicable)
+# Redirect all requests to index.html (your main app)
+/*    /index.html   200
+
+# Add any specific redirects you might need
+/login    /login    200
+/signup    /signup    200
+/home    /home    200
+/client-home  /client-home    200
+/translator/home   /translator/home    200
+/translator/browse   /translator/browse    200
+
+# You can also add custom 301 redirects if needed
+# /old-path    /new-path    301
