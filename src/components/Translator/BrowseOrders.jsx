@@ -67,7 +67,7 @@ const BrowseOrders = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [sourceLang, setSourceLang] = useState(null); // State for source language
   const [targetLang, setTargetLang] = useState(null); // State for target language
-  const { currentUser } = useAuth();
+  const { currentUser,userData } = useAuth();
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   useEffect(() => {
@@ -114,14 +114,13 @@ const BrowseOrders = () => {
     if (selectedOrder) {
       const updatedOrder = {
         ...selectedOrder,
-        translator: currentUser.email, // Assuming the translator is the current user
-        translatorName: currentUser.displayName, // Assuming the display name is available
+        translator: currentUser.uid, // Assuming the translator is the current user
+        translatorName: userData.name, // Assuming the display name is available
       };
-
       try {
         await updateDoc(doc(db, "orders", selectedOrder.id), updatedOrder);
-        toast.success("Order updated successfully!");
-        closeModal(); // Close modal after update
+        toast.success("Order Selected successfully!");
+        closeModal(); 
       } catch (error) {
         toast.error("Failed to update order: " + error.message);
       }
