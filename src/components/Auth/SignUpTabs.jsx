@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import { auth, db } from "../../firebase"; 
+import { auth, db } from "../../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth"; // Import this
 import { addDoc, collection } from "firebase/firestore";
 import CreatableSelect from "react-select/creatable";
@@ -12,11 +12,16 @@ const SignUpTabs = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [languages, setLanguages] = useState([]);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
   const handleSignUpClient = async (e) => {
     e.preventDefault();
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       await addDoc(collection(db, "users"), {
         uid: userCredential.user.uid,
         name,
@@ -24,7 +29,7 @@ const SignUpTabs = () => {
         role: "client",
       });
       toast.success("Client account created!");
-      navigate("/home")
+      navigate("/home");
     } catch (error) {
       toast.error("Sign Up failed: " + error.message);
       console.log(error);
@@ -34,7 +39,11 @@ const SignUpTabs = () => {
   const handleSignUpTranslator = async (e) => {
     e.preventDefault();
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       await addDoc(collection(db, "users"), {
         uid: userCredential.user.uid,
         name,
@@ -43,7 +52,7 @@ const SignUpTabs = () => {
         role: "translator",
       });
       toast.success("Translator account created!");
-      navigate("/home")
+      navigate("/home");
     } catch (error) {
       toast.error("Sign Up failed: " + error.message);
       console.log(error);
@@ -53,19 +62,23 @@ const SignUpTabs = () => {
   return (
     <div className="flex items-center justify-center bg-gray-300 h-screen">
       {role === null ? (
-        <div className="bg-white w-2/4 p-10 rounded-xl shadow-md">
-          <h2 className="text-2xl font-semibold mb-6">Welcome Visitor</h2>
-          <p className="mb-3">Please specify what you need. I am a:</p>
-          <div className="flex">
+        <div className="bg-white w-full sm:w-3/4 md:w-1/2 lg:w-1/3 p-6 sm:p-10 rounded-xl shadow-md">
+          <h2 className="text-2xl font-semibold mb-6 text-center">
+            Welcome Visitor
+          </h2>
+          <p className="mb-3 text-center">
+            Please specify what you need. I am a:
+          </p>
+          <div className="flex flex-col sm:flex-row">
             <button
               onClick={() => setRole("client")}
-              className="flex-1 bg-pink-500 hover:bg-pink-400 text-white p-2 rounded mr-2"
+              className="flex-1 bg-pink-500 hover:bg-pink-400 text-white p-3 rounded mb-2 sm:mb-0 sm:mr-2"
             >
               Client
             </button>
             <button
               onClick={() => setRole("translator")}
-              className="flex-1 bg-black hover:bg-gray-800 text-white p-2 rounded"
+              className="flex-1 bg-black hover:bg-gray-800 text-white p-3 rounded"
             >
               Translator
             </button>
@@ -76,9 +89,9 @@ const SignUpTabs = () => {
           onSubmit={
             role === "client" ? handleSignUpClient : handleSignUpTranslator
           }
-          className="bg-white p-6 rounded-lg shadow-md"
+          className="bg-white w-full sm:w-3/4 md:w-1/2 lg:w-1/3 p-6 sm:p-10 rounded-lg shadow-md"
         >
-          <h2 className="text-2xl font-semibold mb-4">
+          <h2 className="text-2xl font-semibold mb-4 text-center">
             Welcome {role.charAt(0).toUpperCase() + role.slice(1)}
           </h2>
           <input
@@ -87,7 +100,7 @@ const SignUpTabs = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            className="mb-4 p-2 border rounded w-full"
+            className="mb-4 p-3 border rounded w-full"
           />
           <input
             type="email"
@@ -95,7 +108,7 @@ const SignUpTabs = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="mb-4 p-2 border rounded w-full"
+            className="mb-4 p-3 border rounded w-full"
           />
           <input
             type="password"
@@ -103,14 +116,14 @@ const SignUpTabs = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="mb-4 p-2 border rounded w-full"
+            className="mb-4 p-3 border rounded w-full"
           />
           {role === "translator" && (
             <CreatableSelect
               isMulti
               options={languageOptions}
               onChange={(selectedOptions) =>
-                setLanguages(selectedOptions.map(option => option.value))
+                setLanguages(selectedOptions.map((option) => option.value))
               }
               placeholder="Select Languages"
               className="mb-4"
@@ -118,11 +131,11 @@ const SignUpTabs = () => {
           )}
           <button
             type="submit"
-            className="w-full bg-pink-500 text-white p-2 rounded"
+            className="w-full bg-pink-500 hover:bg-pink-400 text-white p-3 rounded"
           >
             Sign Up
           </button>
-          <p className="mt-4">
+          <p className="mt-4 text-center">
             Already have an account?{" "}
             <a href="/login" className="text-pink-500">
               Log In
