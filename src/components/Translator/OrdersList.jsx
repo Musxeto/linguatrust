@@ -19,7 +19,7 @@ const OrdersList = ({ orders, handleCardClick }) => {
             <p>Status: {order.status}</p>
             <p>Client: {order.clientName}</p>
             <a
-              href={`/order/${order.id}/chat`}
+              href={`/translator/order/${order.id}/chat`}
               className="text-customPink mt-2 flex items-center gap-2"
             >
               <FiMessageCircle size={16} /> Chat

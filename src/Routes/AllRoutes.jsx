@@ -8,23 +8,15 @@ import TranslatorHome from "../components/Translator/TranslatorHome"; // Transla
 import HomeRoute from "./HomeRoute";
 import UploadDocument from "../components/Client/UploadDocument";
 import BrowseOrders from "../components/Translator/BrowseOrders";
+import TranslatorChat from "../components/Translator/TranslatorChat";
+import ClientChat from "../components/Client/ClientChat";
 
 const AllRoutes = () => {
   return (
     <Router>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <HomeRoute />
-          }
-        />
-        <Route
-          path="/home"
-          element={
-            <HomeRoute />
-          }
-        />
+        <Route path="/" element={<HomeRoute />} />
+        <Route path="/home" element={<HomeRoute />} />
         <Route
           path="/client-home"
           element={
@@ -54,6 +46,22 @@ const AllRoutes = () => {
           element={
             <PrivateRoute requiredRole={"translator"}>
               <BrowseOrders />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/client/order/:id/chat"
+          element={
+            <PrivateRoute requiredRole={"client"}>
+              <ClientChat />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/translator/order/:id/chat"
+          element={
+            <PrivateRoute requiredRole={"translator"}>
+              <TranslatorChat />
             </PrivateRoute>
           }
         />
