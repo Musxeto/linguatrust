@@ -22,7 +22,7 @@ const LoginPage = () => {
 
   return (
     <div className="flex items-center justify-center h-screen">
-      <form onSubmit={handleLogin} className="bg-white p-6 rounded-lg shadow-md">
+      <form onSubmit={handleLogin} className="bg-white p-6 rounded-lg shadow-2xl">
         <h2 className="text-2xl font-semibold mb-4">Welcome Back</h2>
         <input
           type="email"
