@@ -24,7 +24,7 @@ const SignUpTabs = () => {
         role: "client",
       });
       toast.success("Client account created!");
-      navigate("/")
+      navigate("/home")
     } catch (error) {
       toast.error("Sign Up failed: " + error.message);
       console.log(error);
@@ -43,7 +43,7 @@ const SignUpTabs = () => {
         role: "translator",
       });
       toast.success("Translator account created!");
-      navigate("/")
+      navigate("/home")
     } catch (error) {
       toast.error("Sign Up failed: " + error.message);
       console.log(error);
