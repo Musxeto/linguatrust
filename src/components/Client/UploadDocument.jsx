@@ -119,6 +119,7 @@ const UploadDocument = ({ closePopup }) => {
         clientEmail: currentUser.email,
         status: "Pending",
         translatorName: "Unassigned",
+        translator:"Unassigned"
       });
   
       toast.success("Order placed successfully!");

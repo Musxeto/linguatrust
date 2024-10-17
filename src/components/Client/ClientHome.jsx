@@ -4,10 +4,10 @@ import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { useAuth } from "../../contexts/AuthContext";
 import Navbar from "./Navbar";
-import UploadDocument from "./UploadDocument"; 
-import OrdersList from "./OrdersList"; 
+import UploadDocument from "./UploadDocument";
+import OrdersList from "./OrdersList";
 import { FiUpload } from "react-icons/fi";
-import OrderDetailsModal from "../OrderDetailsModal"; 
+import OrderDetailsModal from "../OrderDetailsModal";
 const ClientHome = () => {
   const [orders, setOrders] = useState([]);
   const [popupVisible, setPopupVisible] = useState(false);
@@ -65,17 +65,14 @@ const ClientHome = () => {
           <FiUpload size={20} /> New Order
         </button>
 
-        {/* Orders List */}
         <OrdersList orders={orders} handleCardClick={handleCardClick} />
 
-        {/* Popup for Upload Document */}
         {popupVisible && (
           <div className="fixed inset-0 flex items-center justify-center bg-customBlack bg-opacity-50">
             <UploadDocument closePopup={handlePopupClose} />
           </div>
         )}
 
-        {/* Popup for Order Details */}
         {selectedOrder && (
           <OrderDetailsModal
             order={selectedOrder}

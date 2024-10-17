@@ -17,7 +17,7 @@ const TranslatorHome = () => {
     const fetchOrders = async () => {
       const q = query(
         collection(db, "orders"),
-        where("translatorId", "==", currentUser.uid) // Assuming you store the translator ID here
+        where("translatorId", "==", currentUser.uid) 
       );
       const unsubscribe = onSnapshot(
         q,
