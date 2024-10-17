@@ -2,7 +2,8 @@ import React, { useContext, useState, useEffect } from 'react';
 import { auth } from '../firebase'; 
 import { db } from '../firebase'; // Firestore reference
 import { collection, query, where, getDocs } from 'firebase/firestore'; // Firestore functions
-
+import { signOut } from 'firebase/auth';
+import { ToastContainer,toast } from 'react-toastify';
 const AuthContext = React.createContext();
 
 export function useAuth() {

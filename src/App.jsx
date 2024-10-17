@@ -7,7 +7,7 @@ import './App.css'
 function App() {
   return (
     <AuthProvider>
-      <div className="App">
+      <div>
         <ToastContainer />
         <AllRoutes />
       </div>

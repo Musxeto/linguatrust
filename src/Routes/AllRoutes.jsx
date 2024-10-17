@@ -7,6 +7,7 @@ import PrivateRoute from "./PrivateRoute"; // Route protection
 import ClientHome from "../components/Client/ClientHome"; // Client home page with records
 import TranslatorHome from "../components/Translator/TranslatorHome"; // Translator orders page
 import HomeRoute from "./HomeRoute";
+import UploadDocument from "../components/Client/UploadDocument";
 
 const AllRoutes = () => {
   return (
@@ -23,6 +24,14 @@ const AllRoutes = () => {
           element={
             <PrivateRoute>
               <ClientHome />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/upload"
+          element={
+            <PrivateRoute>
+              <UploadDocument />
             </PrivateRoute>
           }
         />
