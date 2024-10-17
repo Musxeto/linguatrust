@@ -5,6 +5,9 @@ import { toast } from "react-toastify";
 import { useAuth } from "../../contexts/AuthContext";
 import Navbar from "./Navbar";
 import UploadDocument from "./UploadDocument"; // Import your UploadDocument component
+import OrdersList from "./OrdersList"; // Import the new OrdersList component
+import { FiUpload } from "react-icons/fi";
+import OrderDetailsModal from "./OrderDetailsModal"; // Import the new OrderDetailsModal component
 
 const ClientHome = () => {
   const [orders, setOrders] = useState([]);
@@ -39,7 +42,6 @@ const ClientHome = () => {
 
   const handleCardClick = (order) => {
     setSelectedOrder(order);
-    setPopupVisible(true);
   };
 
   const handlePopupClose = () => {
@@ -51,74 +53,35 @@ const ClientHome = () => {
     <>
       <Navbar />
       <div className="container px-4">
-        <h1 className="text-3xl font-bold mb-4">Welcome, {userData.name}!</h1>
-        {/* Open Upload Document Popup */}
+        <h1 className="text-3xl font-bold mb-4">
+          Welcome,{" "}
+          <span className="text-customPink">{userData.name.toUpperCase()}</span>
+          !
+        </h1>
+
         <button
           onClick={() => setPopupVisible(true)}
-          className="bg-blue-500 text-white px-4 py-2 rounded mb-4"
+          className="bg-customPink text-customWhite px-4 py-2 rounded mb-4 flex items-center gap-2"
         >
-          New Order
+          <FiUpload size={20} /> New Order
         </button>
 
-        {/* Orders Section */}
-        <div className="flex overflow-x-auto space-x-4 mb-4">
-          {orders.map((order) => (
-            <div
-              key={order.id}
-              className="bg-white shadow-lg rounded-lg p-4 cursor-pointer"
-              onClick={() => handleCardClick(order)}
-            >
-              <h2 className="font-semibold">
-                {order.sourceLanguage} to {order.targetLanguage}
-              </h2>
-              <p>Status: {order.status}</p>
-              <p>Assigned to: {order.translatorName}</p>
-              <a
-                href={`/order/${order.id}/chat`}
-                className="text-blue-500 block mt-2"
-              >
-                Chat
-              </a>
-            </div>
-          ))}
-        </div>
+        {/* Orders List */}
+        <OrdersList orders={orders} handleCardClick={handleCardClick} />
 
         {/* Popup for Upload Document */}
         {popupVisible && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <UploadDocument closePopup={handlePopupClose} />{" "}
-            {/* Pass close function as prop */}
+          <div className="fixed inset-0 flex items-center justify-center bg-customBlack bg-opacity-50">
+            <UploadDocument closePopup={handlePopupClose} />
           </div>
         )}
 
         {/* Popup for Order Details */}
         {selectedOrder && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white rounded-lg p-6 shadow-lg">
-              <h2 className="text-lg font-bold mb-2">
-                {selectedOrder.sourceLanguage} to {selectedOrder.targetLanguage}
-              </h2>
-              <p>Status: {selectedOrder.status}</p>
-              <p>Assigned to: {selectedOrder.translatorName}</p>
-              <p>
-                Document Link:{" "}
-                <a
-                  href={selectedOrder.documentLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500"
-                >
-                  {selectedOrder.documentLink}
-                </a>
-              </p>
-              <button
-                onClick={handlePopupClose}
-                className="mt-4 bg-red-500 text-white px-4 py-2 rounded"
-              >
-                Close
-              </button>
-            </div>
-          </div>
+          <OrderDetailsModal
+            order={selectedOrder}
+            closeModal={handlePopupClose}
+          />
         )}
       </div>
     </>
