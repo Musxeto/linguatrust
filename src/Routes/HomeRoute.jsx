@@ -12,7 +12,7 @@ const HomeRoute = () => {
     return <Navigate to="/client-home" />
   }
   if (userData.role==="translator") {
-    return <Navigate to="/translator-home" />;
+    return <Navigate to="/translator/home" />;
   }
   return <Navigate to="/login" />
 };

@@ -4,11 +4,10 @@ import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { useAuth } from "../../contexts/AuthContext";
 import Navbar from "./Navbar";
-import UploadDocument from "./UploadDocument"; // Import your UploadDocument component
-import OrdersList from "./OrdersList"; // Import the new OrdersList component
+import UploadDocument from "./UploadDocument"; 
+import OrdersList from "./OrdersList"; 
 import { FiUpload } from "react-icons/fi";
-import OrderDetailsModal from "./OrderDetailsModal"; // Import the new OrderDetailsModal component
-
+import OrderDetailsModal from "../OrderDetailsModal"; 
 const ClientHome = () => {
   const [orders, setOrders] = useState([]);
   const [popupVisible, setPopupVisible] = useState(false);

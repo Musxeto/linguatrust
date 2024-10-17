@@ -115,6 +115,7 @@ const UploadDocument = ({ closePopup }) => {
         estimatedCost: pages * COST, 
         documentLink: downloadURL, 
         clientId: currentUser.uid, 
+        clientName: currentUser.name,
         clientEmail: currentUser.email,
         status: "Pending",
         translatorName: "Unassigned",

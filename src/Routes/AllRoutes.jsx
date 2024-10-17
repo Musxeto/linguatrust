@@ -8,6 +8,7 @@ import ClientHome from "../components/Client/ClientHome"; // Client home page wi
 import TranslatorHome from "../components/Translator/TranslatorHome"; // Translator orders page
 import HomeRoute from "./HomeRoute";
 import UploadDocument from "../components/Client/UploadDocument";
+import BrowseOrders from "../components/Translator/BrowseOrders";
 
 const AllRoutes = () => {
   return (
@@ -22,7 +23,7 @@ const AllRoutes = () => {
         <Route
           path="/client-home"
           element={
-            <PrivateRoute>
+            <PrivateRoute requiredRole={"client"}>
               <ClientHome />
             </PrivateRoute>
           }
@@ -30,16 +31,24 @@ const AllRoutes = () => {
         <Route
           path="/upload"
           element={
-            <PrivateRoute>
+            <PrivateRoute requiredRole={"client"}>
               <UploadDocument />
             </PrivateRoute>
           }
         />
         <Route
-          path="/translator-home"
+          path="/translator/home"
           element={
-            <PrivateRoute>
+            <PrivateRoute requiredRole={"translator"}>
               <TranslatorHome />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/translator/browse"
+          element={
+            <PrivateRoute requiredRole={"translator"}>
+              <BrowseOrders />
             </PrivateRoute>
           }
         />
