@@ -15,7 +15,7 @@ const OrdersList = ({ orders, handleCardClick }) => {
             {order.sourceLanguage} to {order.targetLanguage}
           </h2>
           <p>Status: {order.status}</p>
-          <p>Customer: {order.customerName}</p>
+          <p>Client: {order.clientName}</p>
           <a
             href={`/order/${order.id}/chat`}
             className="text-customPink mt-2 flex items-center gap-2"

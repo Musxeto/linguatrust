@@ -14,7 +14,7 @@ const LoginPage = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       toast.success("Welcome back!");
-      navigate("/")
+      navigate("/home")
     } catch (error) {
       toast.error("Login failed: " + error.message);
     }

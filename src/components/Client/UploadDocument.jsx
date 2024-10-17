@@ -76,7 +76,7 @@ const UploadDocument = ({ closePopup }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false); 
   const [popupVisible, setPopupVisible] = useState(true); 
-  const {currentUser} = useAuth();
+  const {currentUser,userData} = useAuth();
 
   const navigate = useNavigate();
 
@@ -115,7 +115,7 @@ const UploadDocument = ({ closePopup }) => {
         estimatedCost: pages * COST, 
         documentLink: downloadURL, 
         clientId: currentUser.uid, 
-        clientName: currentUser.name,
+        clientName: userData.name,
         clientEmail: currentUser.email,
         status: "Pending",
         translatorName: "Unassigned",

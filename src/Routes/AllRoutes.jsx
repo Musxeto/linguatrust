@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "../components/Home"; // Client homepage
 import SignUpTabs from "../components/Auth/SignUpTabs"; // Sign-up component
 import LoginPage from "../components/Auth/LoginModal"; // Login component
 import PrivateRoute from "./PrivateRoute"; // Route protection
@@ -16,6 +15,12 @@ const AllRoutes = () => {
       <Routes>
         <Route
           path="/"
+          element={
+            <HomeRoute />
+          }
+        />
+        <Route
+          path="/home"
           element={
             <HomeRoute />
           }
