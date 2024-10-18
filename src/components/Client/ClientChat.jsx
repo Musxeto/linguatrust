@@ -1,31 +1,35 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { FaPaperPlane, FaSpinner, FaFileDownload } from "react-icons/fa";
-import { realdb, db, storage } from "../../firebase";
+import { FaPaperPlane, FaSpinner } from "react-icons/fa";
+import { realdb, db } from "../../firebase";
 import { ref, onValue, update } from "firebase/database";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { ClipLoader } from "react-spinners";
-import OrdersList from './OrdersList'
-import { getDownloadURL, ref as storageRef } from "firebase/storage";
+import Navbar from "./Navbar";
 
 const ClientChat = () => {
   const { id } = useParams();
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState("");
-  const [file, setFile] = useState(null);
   const [order, setOrder] = useState({});
-  const [loadingOrder, setLoadingOrder] = useState(true); // Track loading state for order
-  const [loadingMessages, setLoadingMessages] = useState(true); // Track loading state for messages
-
-  const messagesEndRef = useRef(null); // Ref for automatically scrolling to the bottom
+  const [loadingOrder, setLoadingOrder] = useState(true);
+  const [loadingMessages, setLoadingMessages] = useState(true);
+  const messagesEndRef = useRef(null);
   const messagesRef = ref(realdb, `orders/${id}/messages`);
+  const [isUserScrolling, setIsUserScrolling] = useState(false);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  const handleScroll = (e) => {
+    const { scrollTop, clientHeight, scrollHeight } = e.target;
+    setIsUserScrolling(scrollTop + clientHeight < scrollHeight - 10);
   };
 
-  // Separate useEffect for fetching the order details
+  const scrollToBottom = () => {
+    if (!isUserScrolling) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   useEffect(() => {
     const fetchOrder = async () => {
       setLoadingOrder(true);
@@ -49,9 +53,8 @@ const ClientChat = () => {
     };
 
     fetchOrder();
-  }, [id]); // Only run when 'id' changes
+  }, [id]);
 
-  // Separate useEffect for listening to real-time messages
   useEffect(() => {
     const unsubscribeMessages = onValue(
       messagesRef,
@@ -60,114 +63,115 @@ const ClientChat = () => {
         if (data) {
           setMessages(Object.values(data));
         }
-        setLoadingMessages(false); // Set loading to false after receiving messages
-        scrollToBottom(); // Scroll to the bottom after new messages are loaded
+        setLoadingMessages(false);
+        scrollToBottom();
       },
       (error) => {
         toast.error("Failed to fetch messages: " + error.message);
-        setLoadingMessages(false); // Set loading to false if there's an error
+        setLoadingMessages(false);
       }
     );
 
     return () => {
       unsubscribeMessages();
     };
-  }, [messagesRef]); // Only run when 'messagesRef' changes
+  }, [messagesRef]);
+
+  useEffect(() => {
+    const messageContainer = document.querySelector(".message-container");
+    messageContainer.addEventListener("scroll", handleScroll);
+    
+    return () => {
+      messageContainer.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const handleSendMessage = async () => {
-    if (messageInput.trim() === "" && !file) {
-      toast.error("Please enter a message or upload a file.");
+    if (messageInput.trim() === "") {
+      toast.error("Please enter a message.");
       return;
     }
 
     const newMessage = {
       text: messageInput,
-      timestamp: Date.now(), // Use Date.now() for Firebase-compliant key
+      timestamp: Date.now(),
     };
 
-    if (file) {
-      const fileRef = storageRef(storage, `documents/${id}/${file.name}`);
-      await fileRef.put(file);
-      newMessage.document = await getDownloadURL(fileRef); // Add download link
-    }
-
-    // Update the message in the real-time database
     update(messagesRef, {
       [newMessage.timestamp]: newMessage,
     });
 
-    setMessages((prev) => [...prev, newMessage]); // Add message to state
+    setMessages((prev) => [...prev, newMessage]);
     setMessageInput("");
-    setFile(null); // Clear file input
-    scrollToBottom(); // Scroll to the bottom after sending a message
+    scrollToBottom();
   };
 
   return (
-    <div className="flex flex-col h-screen p-4 bg-customWhite">
-      <div className="sticky top-0 shadow-lg bg-customWhite z-10 p-4 border-b">
-        <h1 className="text-xl font-bold">
-          Order - {order.sourceLanguage} to {order.targetLanguage}
-        </h1>
-        <h2 className="text-lg font-bold"> Translator: <span className="text-customPink">{order.translatorName}</span></h2>
-        {loadingOrder ? (
-          <div className="flex justify-center shadow-lg items-center h-64">
-            <ClipLoader size={50} color={"#000"} loading={loadingOrder} />
-          </div>
-        ) : (
-          <iframe
-            title="PDF Viewer"
-            src={order.documentLink}
-            width="100%"
-            height="150px"
-            className="border-none"
-            onLoad={() => setLoading(false)} // Set loading to false when the document is loaded
-          />
-        )}
-      </div>
-      <div className="flex-1 overflow-y-auto p-2">
-        {loadingMessages ? (
-          <div className="flex justify-center items-center h-64">
-            <ClipLoader size={50} color={"#000"} loading={loadingMessages} />
-          </div>
-        ) : (
-          <div>
-            {messages.map((msg, index) => (
-              <div key={index} className="mb-2">
-                <div className={`p-2 rounded ${msg.document ? "bg-gray-200" : "bg-customPink"}`}>
-                  {msg.text && <p>{msg.text}</p>}
-                  {msg.document && (
-                    <a
-                      href={msg.document}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-500 underline"
-                    >
-                      <FaFileDownload /> Download
-                    </a>
-                  )}
+    <>
+      <div className="flex flex-col h-screen bg-customWhite">
+        <Navbar />
+        <div className="sticky top-0 shadow-lg bg-customWhite z-10 p-4 border-b">
+          <h1 className="text-xl font-bold">
+            Order - {order.sourceLanguage} to {order.targetLanguage}
+          </h1>
+          <h2 className="text-lg font-bold">
+            Translator: <span className="text-customPink">{order.translatorName}</span>
+          </h2>
+          {loadingOrder ? (
+            <div className="flex justify-center shadow-lg items-center h-64">
+              <ClipLoader size={50} color={"#000"} loading={loadingOrder} />
+            </div>
+          ) : (
+            <iframe
+              title="PDF Viewer"
+              src={order.documentLink}
+              width="100%"
+              height="150px"
+              className="border-none"
+              onLoad={() => setLoading(false)}
+            />
+          )}
+        </div>
+        <div className="message-container flex-1 overflow-y-auto p-2">
+          {loadingMessages ? (
+            <div className="flex justify-center items-center h-64">
+              <ClipLoader size={50} color={"#000"} loading={loadingMessages} />
+            </div>
+          ) : (
+            <div>
+              {messages.map((msg, index) => (
+                <div key={index} className="mb-2">
+                  <div className={`p-2 rounded bg-customPink`}>
+                    {msg.text && <p>{msg.text}</p>}
+                  </div>
                 </div>
-              </div>
-            ))}
-            <div ref={messagesEndRef} /> {/* Ref to automatically scroll to bottom */}
-          </div>
-        )}
+              ))}
+              <div ref={messagesEndRef} />
+            </div>
+          )}
+        </div>
+        <div className="flex items-center mt-4 space-x-2 flex-wrap">
+          <input
+            type="text"
+            value={messageInput}
+            onChange={(e) => setMessageInput(e.target.value)}
+            placeholder="Type your message"
+            className="border border-gray-300 p-2 flex-grow rounded-md focus:outline-none focus:ring focus:ring-customPink"
+          />
+          <button
+            onClick={handleSendMessage}
+            className="bg-customPink text-white p-2 rounded-md flex items-center"
+          >
+            {loadingOrder ? (
+              <FaSpinner className="animate-spin" />
+            ) : (
+              <FaPaperPlane />
+            )}
+            <span className="ml-2">Send</span>
+          </button>
+        </div>
       </div>
-      <div className="flex items-center mt-4 space-x-2 flex-wrap">
-        <input
-          type="text"
-          value={messageInput}
-          onChange={(e) => setMessageInput(e.target.value)}
-          placeholder="Type your message..."
-          className="flex-1 p-2 border rounded"
-        />
-        <button
-          onClick={handleSendMessage}
-          className="p-2 bg-customPink text-white rounded flex items-center"
-        >
-          <FaPaperPlane />
-        </button>
-      </div>
-    </div>
+    </>
   );
 };
 

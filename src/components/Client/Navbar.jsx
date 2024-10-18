@@ -22,9 +22,13 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flex justify-between items-center p-4 mb-5 bg-customPink text-white">
-      <h1 className="text-lg">ComsaTranslator</h1>
-      <div className="hidden md:flex items-center"> {/* Show on medium screens and up */}
+    <nav className="flex justify-between relative items-center p-4 mb-5 z-30 bg-customPink text-white">
+      <Link to={"/home"}>
+        <h1 className="text-lg">ComsaTranslator</h1>
+      </Link>
+      <div className="hidden md:flex items-center">
+        {" "}
+        {/* Show on medium screens and up */}
         <button
           onClick={() => setDropdownOpen((prev) => !prev)}
           className="focus:outline-none"
@@ -39,7 +43,7 @@ const Navbar = () => {
           </div>
         )}
       </div>
-      <button 
+      <button
         className="md:hidden focus:outline-none" // Show only on small screens
         onClick={() => setMobileMenuOpen((prev) => !prev)}
       >
