@@ -1,7 +1,7 @@
-import React from 'react';
-import Modal from 'react-modal';
-import CreatableSelect from 'react-select'; // Import react-select
-import { auth } from '../../firebase';
+import React from "react";
+import Modal from "react-modal";
+import CreatableSelect from "react-select"; // Import react-select
+import { auth } from "../../firebase";
 
 const languageOptions = [
   { label: "English", value: "English" },
@@ -56,37 +56,73 @@ const languageOptions = [
   { label: "Xhosa", value: "Xhosa" },
 ];
 
-const UnassignedOrderDetailsModal = ({ isOpen, onRequestClose, order, sourceLang, targetLang, setSourceLang, setTargetLang, onConfirmSelection }) => {
+const UnassignedOrderDetailsModal = ({
+  isOpen,
+  onRequestClose,
+  order,
+  sourceLang,
+  targetLang,
+  setSourceLang,
+  setTargetLang,
+  onConfirmSelection,
+}) => {
   if (!order) return null;
 
   return (
-    <Modal 
-      isOpen={isOpen} 
-      onRequestClose={onRequestClose} 
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onRequestClose}
       className="w-full max-w-lg mx-auto p-4 rounded bg-white shadow-lg"
       overlayClassName="fixed inset-0 bg-black bg-opacity-50"
     >
       <h2 className="text-xl font-semibold mb-4">Order Details</h2>
-      <p className="mb-2"><strong>Client Email:</strong> {order.clientEmail}</p>
       <p className="mb-2">
-        <strong>Document Link:</strong> 
-        <a href={order.documentLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">View Document</a>
+        <strong>Client Email:</strong> {order.clientEmail}
       </p>
-      <p className="mb-2"><strong>Estimated Cost:</strong> ${order.estimatedCost}</p>
-      <p className="mb-2"><strong>Page Count:</strong> {order.pageCount}</p>
-      <p className="mb-2"><strong>Source Language:</strong> {order.sourceLanguage}</p>
-      <p className="mb-2"><strong>Target Language:</strong> {order.targetLanguage}</p>
-      <p className="mb-4"><strong>Status:</strong> {order.status}</p>
+      <p className="mb-2">
+        <iframe
+          title="PDF Viewer"
+          src={order.documentLink}
+          width="100%"
+          height="200px"
+          className="border-none"
+          onLoad={() => setLoading(false)} // Set loading to false when the document is loaded
+        />
+        <strong>Document Link:</strong>
+        <a
+          href={order.documentLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 hover:underline"
+        >
+          View Document
+        </a>
+      </p>
+      <p className="mb-2">
+        <strong>Estimated Cost:</strong> ${order.estimatedCost}
+      </p>
+      <p className="mb-2">
+        <strong>Page Count:</strong> {order.pageCount}
+      </p>
+      <p className="mb-2">
+        <strong>Source Language:</strong> {order.sourceLanguage}
+      </p>
+      <p className="mb-2">
+        <strong>Target Language:</strong> {order.targetLanguage}
+      </p>
+      <p className="mb-4">
+        <strong>Status:</strong> {order.status}
+      </p>
 
       <div className="flex justify-between">
-        <button 
-          onClick={onConfirmSelection} 
+        <button
+          onClick={onConfirmSelection}
           className="flex-1 bg-green-500 text-white px-4 py-2 rounded mr-2 hover:bg-green-600 transition duration-200"
         >
           Confirm Selection
         </button>
-        <button 
-          onClick={onRequestClose} 
+        <button
+          onClick={onRequestClose}
           className="flex-1 bg-red-500 text-white px-4 py-2 rounded ml-2 hover:bg-red-600 transition duration-200"
         >
           Close
