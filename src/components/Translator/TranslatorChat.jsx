@@ -2,13 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaPaperPlane, FaSpinner, FaUpload } from "react-icons/fa";
-import { realdb, storage, db } from "../../firebase"; 
+import { realdb, storage, db } from "../../firebase";
 import { ref as dbRef, onValue, update } from "firebase/database";
 import { ref as sRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import Navbar from "./Navbar";
 import { ClipLoader } from "react-spinners";
-import FileUploadModal from "./FileUploadModal"; 
+import FileUploadModal from "./FileUploadModal";
 
 const TranslatorChat = () => {
   const { id } = useParams();
@@ -21,7 +21,7 @@ const TranslatorChat = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
 
-  const messagesRef = dbRef(realdb, `orders/${id}/messages`); 
+  const messagesRef = dbRef(realdb, `orders/${id}/messages`);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -101,12 +101,12 @@ const TranslatorChat = () => {
   };
 
   const handleFileUpload = async (file) => {
-    setIsUploading(true); 
-    const storageRef = sRef(storage, `orders/${id}/${file.name}`); 
+    setIsUploading(true);
+    const storageRef = sRef(storage, `orders/${id}/${file.name}`);
 
     try {
-      const uploadTask = await uploadBytes(storageRef, file); 
-      const downloadURL = await getDownloadURL(uploadTask.ref); 
+      const uploadTask = await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(uploadTask.ref);
       const newMessage = {
         fileUrl: downloadURL,
         fileName: file.name,
@@ -124,7 +124,7 @@ const TranslatorChat = () => {
     } catch (error) {
       toast.error("File upload failed: " + error.message);
     } finally {
-      setIsUploading(false); 
+      setIsUploading(false);
     }
   };
 
@@ -140,10 +140,10 @@ const TranslatorChat = () => {
           ) : (
             order && (
               <>
-                <h1 className="text-xl font-bold">
+                <h1 className="text-lg md:text-xl font-bold">
                   Order - {order.sourceLanguage} to {order.targetLanguage}
                 </h1>
-                <h2 className="text-lg font-bold">
+                <h2 className="text-base md:text-lg font-bold">
                   Translator:{" "}
                   <span className="text-customPink">
                     {order.translatorName}
@@ -210,14 +210,14 @@ const TranslatorChat = () => {
             <span className="ml-2">Send</span>
           </button>
           <button
-            onClick={() => setIsModalOpen(true)} 
+            onClick={() => setIsModalOpen(true)}
             className="bg-gray-300 p-2 rounded-md flex items-center"
           >
             <FaUpload />
             <span className="ml-2">Attach File</span>
           </button>
         </div>
-        {isUploading && ( 
+        {isUploading && (
           <div className="flex justify-center p-4">
             <ClipLoader size={30} color={"#000"} loading={isUploading} />
           </div>
@@ -226,7 +226,7 @@ const TranslatorChat = () => {
       <FileUploadModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onFileUpload={handleFileUpload} 
+        onFileUpload={handleFileUpload}
       />
     </>
   );

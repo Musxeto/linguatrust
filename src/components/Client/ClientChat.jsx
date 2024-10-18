@@ -71,6 +71,7 @@ const ClientChat = () => {
     };
     fetchOrder();
   }, [id]);
+
   const handleSendMessage = () => {
     if (messageInput.trim() === "") {
       toast.error("Please enter a message.");
@@ -104,27 +105,23 @@ const ClientChat = () => {
           ) : (
             order && (
               <>
-                <h1 className="text-xl font-bold md:text-2xl">
+                <h1 className="text-lg md:text-xl font-bold">
                   Order - {order.sourceLanguage} to {order.targetLanguage}
                 </h1>
-                <h2 className="text-lg font-bold">
+                <h2 className="text-base md:text-lg font-bold">
                   Translator:{" "}
-                  <span className="text-customPink">
-                    {order.translatorName}
-                  </span>
+                  <span className="text-customPink">{order.translatorName}</span>
                 </h2>
                 <iframe
                   title="PDF Viewer"
                   src={order.documentLink}
-                  width="100%"
-                  height="150"
-                  className="border-none"
+                  className="border-none w-full max-w-full h-48 md:h-64 lg:h-80"
                 />
               </>
             )
           )}
         </div>
-        <div className="message-container flex-1 overflow-y-auto p-4 md:p-2">
+        <div className="flex-1 overflow-y-auto p-2">
           {loadingMessages ? (
             <div className="flex justify-center items-center h-64">
               <ClipLoader size={50} color={"#000"} loading={loadingMessages} />
@@ -132,23 +129,13 @@ const ClientChat = () => {
           ) : (
             <div>
               {messages.map((msg, index) => (
-                <div key={index} className="mb-2">
+                <div key={index} className="mb-2 max-w-full">
                   <div
-                    className={`p-2 rounded ${
+                    className={`p-2 rounded break-words max-w-xs sm:max-w-md lg:max-w-lg ${
                       msg.sender === "client" ? "bg-blue-100" : "bg-gray-100"
                     }`}
                   >
                     {msg.text && <p>{msg.text}</p>}
-                    {msg.fileUrl && (
-                      <a
-                        href={msg.fileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-customPink underline"
-                      >
-                        {msg.fileName}
-                      </a>
-                    )}
                   </div>
                 </div>
               ))}
@@ -156,13 +143,13 @@ const ClientChat = () => {
             </div>
           )}
         </div>
-        <div className="flex items-center mt-4 space-x-2 p-2">
+        <div className="flex items-center space-x-2 p-2 bg-white w-full max-w-full">
           <input
             type="text"
             value={messageInput}
             onChange={(e) => setMessageInput(e.target.value)}
             placeholder="Type your message"
-            className="border border-gray-300 p-2 flex-grow rounded-md focus:outline-none focus:ring focus:ring-customPink"
+            className="border border-gray-300 p-2 flex-grow rounded-md focus:outline-none focus:ring focus:ring-customPink w-full"
           />
           <button
             onClick={handleSendMessage}
