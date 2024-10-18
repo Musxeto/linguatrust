@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { FiMessageCircle } from 'react-icons/fi';
-import UpdateStatusModal from './UpdateStatusModal';
+import React, { useState } from "react";
+import { FiMessageCircle } from "react-icons/fi";
+import UpdateStatusModal from "./UpdateStatusModal";
 
 const OrdersList = ({ orders, handleCardClick, handleUpdateOrderStatus }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,7 +18,7 @@ const OrdersList = ({ orders, handleCardClick, handleUpdateOrderStatus }) => {
 
   const handleStatusUpdate = (status) => {
     if (selectedOrderId) {
-      handleUpdateOrderStatus(selectedOrderId, status); 
+      handleUpdateOrderStatus(selectedOrderId, status);
     }
   };
 
@@ -38,26 +38,29 @@ const OrdersList = ({ orders, handleCardClick, handleUpdateOrderStatus }) => {
             </h2>
             <p>Status: {order.status}</p>
             <p>Client: {order.clientName}</p>
-            <a
-              href={`/translator/order/${order.id}/chat`}
-              className="text-customPink mt-2 flex items-center gap-2"
-            >
-              <FiMessageCircle size={16} /> Chat
-            </a>
+            <button className="mt-2 bg-black text-center w-full text-white p-2 rounded">
+              <a
+                href={`/translator/order/${order.id}/chat`}
+                className="text-white flex items-center justify-center gap-2"
+              >
+                <FiMessageCircle size={16} /> Chat
+              </a>
+            </button>
+
             <button
               onClick={() => openModal(order.id)} // Open the moda
-              className="mt-2 bg-customPink text-white p-2 rounded"
+              className="mt-2 bg-customPink text-center w-full text-white p-2 rounded"
             >
               Update Status
             </button>
           </div>
         ))
       )}
-     
+
       <UpdateStatusModal
         isOpen={isModalOpen}
         onClose={closeModal}
-        onUpdateStatus={handleStatusUpdate} 
+        onUpdateStatus={handleStatusUpdate}
       />
     </div>
   );
