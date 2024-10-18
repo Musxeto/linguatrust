@@ -1,14 +1,13 @@
-// Navbar.js
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Import Link if you're using React Router
-import { FaUserCircle } from "react-icons/fa"; // Import the user icon
+import { Link, useNavigate } from "react-router-dom"; 
+import { FaUserCircle } from "react-icons/fa"; 
 import { auth } from "../../firebase";
 import { signOut } from "firebase/auth";
 import { toast } from "react-toastify";
 
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // State for mobile menu
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false); 
   const navigate = useNavigate();
 
   const onLogout = async () => {
@@ -23,12 +22,12 @@ const Navbar = () => {
 
   return (
     <nav className="flex justify-between relative items-center p-4 mb-5 z-30 bg-customPink text-white">
+      <h1></h1>
       <Link to={"/home"}>
-        <h1 className="text-lg">ComsaTranslator</h1>
+        <img src="/logo.png" alt="Logo" className="h-10 z-10"/> 
       </Link>
       <div className="hidden md:flex items-center">
-        {" "}
-        {/* Show on medium screens and up */}
+
         <button
           onClick={() => setDropdownOpen((prev) => !prev)}
           className="focus:outline-none"
@@ -44,7 +43,7 @@ const Navbar = () => {
         )}
       </div>
       <button
-        className="md:hidden focus:outline-none" // Show only on small screens
+        className="md:hidden focus:outline-none" 
         onClick={() => setMobileMenuOpen((prev) => !prev)}
       >
         <FaUserCircle className="h-8 w-8" />
