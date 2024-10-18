@@ -2,13 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaPaperPlane, FaSpinner, FaUpload } from "react-icons/fa";
-import { realdb, storage, db } from "../../firebase"; // Ensure these imports are correct
+import { realdb, storage, db } from "../../firebase"; 
 import { ref as dbRef, onValue, update } from "firebase/database";
 import { ref as sRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import Navbar from "./Navbar";
 import { ClipLoader } from "react-spinners";
-import FileUploadModal from "./FileUploadModal"; // Import the modal component
+import FileUploadModal from "./FileUploadModal"; 
 
 const TranslatorChat = () => {
   const { id } = useParams();
@@ -19,9 +19,9 @@ const TranslatorChat = () => {
   const [loadingOrder, setLoadingOrder] = useState(true);
   const messagesEndRef = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isUploading, setIsUploading] = useState(false); // New loading state for file upload
+  const [isUploading, setIsUploading] = useState(false);
 
-  const messagesRef = dbRef(realdb, `orders/${id}/messages`); // Use dbRef for Realtime Database
+  const messagesRef = dbRef(realdb, `orders/${id}/messages`); 
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -101,13 +101,12 @@ const TranslatorChat = () => {
   };
 
   const handleFileUpload = async (file) => {
-    setIsUploading(true); // Set loading state to true before upload
-    const storageRef = sRef(storage, `orders/${id}/${file.name}`); // Use sRef for Storage
+    setIsUploading(true); 
+    const storageRef = sRef(storage, `orders/${id}/${file.name}`); 
 
     try {
-      const uploadTask = await uploadBytes(storageRef, file); // Upload file
-      const downloadURL = await getDownloadURL(uploadTask.ref); // Get download URL
-
+      const uploadTask = await uploadBytes(storageRef, file); 
+      const downloadURL = await getDownloadURL(uploadTask.ref); 
       const newMessage = {
         fileUrl: downloadURL,
         fileName: file.name,
@@ -125,7 +124,7 @@ const TranslatorChat = () => {
     } catch (error) {
       toast.error("File upload failed: " + error.message);
     } finally {
-      setIsUploading(false); // Set loading state to false after upload is complete
+      setIsUploading(false); 
     }
   };
 
@@ -211,14 +210,14 @@ const TranslatorChat = () => {
             <span className="ml-2">Send</span>
           </button>
           <button
-            onClick={() => setIsModalOpen(true)} // Open the modal
+            onClick={() => setIsModalOpen(true)} 
             className="bg-gray-300 p-2 rounded-md flex items-center"
           >
             <FaUpload />
             <span className="ml-2">Attach File</span>
           </button>
         </div>
-        {isUploading && ( // Show spinner while uploading
+        {isUploading && ( 
           <div className="flex justify-center p-4">
             <ClipLoader size={30} color={"#000"} loading={isUploading} />
           </div>
@@ -227,7 +226,7 @@ const TranslatorChat = () => {
       <FileUploadModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onFileUpload={handleFileUpload} // Pass the file upload handler
+        onFileUpload={handleFileUpload} 
       />
     </>
   );

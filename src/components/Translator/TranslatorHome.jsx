@@ -1,4 +1,3 @@
-// TranslatorHome.jsx
 import React, { useEffect, useState } from "react";
 import { db } from "../../firebase";
 import { collection, query, where, onSnapshot, updateDoc, doc } from "firebase/firestore";
@@ -66,7 +65,7 @@ const TranslatorHome = () => {
         <OrdersList
           orders={orders}
           handleCardClick={handleCardClick}
-          handleUpdateOrderStatus={handleUpdateOrderStatus} // Pass the update function
+          handleUpdateOrderStatus={handleUpdateOrderStatus} 
         />
 
         {selectedOrder && (

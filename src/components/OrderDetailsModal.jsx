@@ -31,7 +31,7 @@ const OrderDetailsModal = ({ order, closeModal }) => {
             width="100%"
             height="200px"
             className="border-none"
-            onLoad={() => setLoading(false)} // Set loading to false when the document is loaded
+            onLoad={() => setLoading(false)}
           />
         </div>
 

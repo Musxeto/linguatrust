@@ -1,9 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { auth } from '../firebase'; 
-import { db } from '../firebase'; // Firestore reference
-import { collection, query, where, getDocs } from 'firebase/firestore'; // Firestore functions
-import { signOut } from 'firebase/auth';
-import { ToastContainer,toast } from 'react-toastify';
+import { db } from '../firebase';
+import { collection, query, where, getDocs } from 'firebase/firestore'; 
 const AuthContext = React.createContext();
 
 export function useAuth() {
@@ -12,13 +10,13 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
-  const [userData, setUserData] = useState(null); // Additional user data
+  const [userData, setUserData] = useState(null); 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       setCurrentUser(user);
-      setLoading(true); // Set loading to true while fetching user data
+      setLoading(true); 
 
       if (user) {
         try {
@@ -37,7 +35,7 @@ export function AuthProvider({ children }) {
           console.error('Error fetching user data:', error);
         }
       } else {
-        setUserData(null); // Reset user data if user is not authenticated
+        setUserData(null);
       }
 
       setLoading(false);
@@ -47,7 +45,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   useEffect(() => {
-    console.log("userdata:", userData); // Log whenever userData changes
+    console.log("userdata:", userData);
   }, [userData]);
 
   const value = {

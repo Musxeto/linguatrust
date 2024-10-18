@@ -1,4 +1,3 @@
-// src/components/Auth/LoginPage.jsx
 import React, { useState } from "react";
 import { auth } from "../../firebase"; 
 import { toast } from "react-toastify";

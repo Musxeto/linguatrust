@@ -1,10 +1,10 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import SignUpTabs from "../components/Auth/SignUpTabs"; // Sign-up component
-import LoginPage from "../components/Auth/LoginModal"; // Login component
-import PrivateRoute from "./PrivateRoute"; // Route protection
-import ClientHome from "../components/Client/ClientHome"; // Client home page with records
-import TranslatorHome from "../components/Translator/TranslatorHome"; // Translator orders page
+import SignUpTabs from "../components/Auth/SignUpTabs"; 
+import LoginPage from "../components/Auth/LoginModal"; 
+import PrivateRoute from "./PrivateRoute";
+import ClientHome from "../components/Client/ClientHome"; 
+import TranslatorHome from "../components/Translator/TranslatorHome"; 
 import HomeRoute from "./HomeRoute";
 import UploadDocument from "../components/Client/UploadDocument";
 import BrowseOrders from "../components/Translator/BrowseOrders";

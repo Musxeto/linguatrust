@@ -65,8 +65,8 @@ const BrowseOrders = () => {
   const [unassignedOrders, setUnassignedOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const [sourceLang, setSourceLang] = useState(null); // State for source language
-  const [targetLang, setTargetLang] = useState(null); // State for target language
+  const [sourceLang, setSourceLang] = useState(null);
+  const [targetLang, setTargetLang] = useState(null); 
   const { currentUser,userData } = useAuth();
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -114,8 +114,8 @@ const BrowseOrders = () => {
     if (selectedOrder) {
       const updatedOrder = {
         ...selectedOrder,
-        translator: currentUser.uid, // Assuming the translator is the current user
-        translatorName: userData.name, // Assuming the display name is available
+        translator: currentUser.uid, 
+        translatorName: userData.name, 
       };
       try {
         await updateDoc(doc(db, "orders", selectedOrder.id), updatedOrder);

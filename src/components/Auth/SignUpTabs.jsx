@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { auth, db } from "../../firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth"; // Import this
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { addDoc, collection } from "firebase/firestore";
 import CreatableSelect from "react-select/creatable";
 import { useNavigate } from "react-router-dom";

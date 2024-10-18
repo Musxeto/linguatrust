@@ -1,4 +1,3 @@
-// UpdateStatusModal.jsx
 import React from 'react';
 
 const UpdateStatusModal = ({ isOpen, onClose, onUpdateStatus }) => {
@@ -10,7 +9,7 @@ const UpdateStatusModal = ({ isOpen, onClose, onUpdateStatus }) => {
 
   const handleSubmit = () => {
     onUpdateStatus(selectedStatus);
-    onClose(); // Close the modal after updating status
+    onClose(); 
   };
 
   if (!isOpen) return null;

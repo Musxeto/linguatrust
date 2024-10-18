@@ -1,4 +1,3 @@
-// OrdersList.jsx
 import React, { useState } from 'react';
 import { FiMessageCircle } from 'react-icons/fi';
 import UpdateStatusModal from './UpdateStatusModal';
@@ -19,7 +18,7 @@ const OrdersList = ({ orders, handleCardClick, handleUpdateOrderStatus }) => {
 
   const handleStatusUpdate = (status) => {
     if (selectedOrderId) {
-      handleUpdateOrderStatus(selectedOrderId, status); // Call the update status function
+      handleUpdateOrderStatus(selectedOrderId, status); 
     }
   };
 
@@ -46,7 +45,7 @@ const OrdersList = ({ orders, handleCardClick, handleUpdateOrderStatus }) => {
               <FiMessageCircle size={16} /> Chat
             </a>
             <button
-              onClick={() => openModal(order.id)} // Open the modal
+              onClick={() => openModal(order.id)} // Open the moda
               className="mt-2 bg-customPink text-white p-2 rounded"
             >
               Update Status
@@ -54,11 +53,11 @@ const OrdersList = ({ orders, handleCardClick, handleUpdateOrderStatus }) => {
           </div>
         ))
       )}
-      {/* Modal for updating order status */}
+     
       <UpdateStatusModal
         isOpen={isModalOpen}
         onClose={closeModal}
-        onUpdateStatus={handleStatusUpdate} // Pass the status update handler
+        onUpdateStatus={handleStatusUpdate} 
       />
     </div>
   );

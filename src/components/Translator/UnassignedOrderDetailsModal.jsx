@@ -1,7 +1,6 @@
 import React from "react";
 import Modal from "react-modal";
-import CreatableSelect from "react-select"; // Import react-select
-import { auth } from "../../firebase";
+;
 
 const languageOptions = [
   { label: "English", value: "English" },
@@ -86,7 +85,7 @@ const UnassignedOrderDetailsModal = ({
           width="100%"
           height="200px"
           className="border-none"
-          onLoad={() => setLoading(false)} // Set loading to false when the document is loaded
+          onLoad={() => setLoading(false)}
         />
         <strong>Document Link:</strong>
         <a

@@ -20,9 +20,9 @@ const SignUpClientForm = ({ setShowSignUpModal }) => {
         role: "client",
       });
       toast.success("Account created!");
-      setShowSignUpModal(false); // Ensure this is defined in your props or state
+      setShowSignUpModal(false); 
     } catch (error) {
-      // Log error details for debugging
+    
       console.error("Sign Up error:", error);
       toast.error("Sign Up failed: " + error.message);
     }

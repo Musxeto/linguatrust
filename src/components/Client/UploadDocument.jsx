@@ -82,10 +82,9 @@ const UploadDocument = ({ closePopup }) => {
 
   const handleFileChange = (e) => setFile(e.target.files[0]);
 
-  // Close Popup logic
   const handlePopupClose = () => {
     setPopupVisible(false);
-    closePopup(); // Call the parent close function
+    closePopup(); 
   };
 
   const handleSourceLangChange = (selectedOption) =>
@@ -144,7 +143,6 @@ const UploadDocument = ({ closePopup }) => {
     );
   };
 
-  // Render the popup only when it's visible
   if (!popupVisible) return null;
 
   return (

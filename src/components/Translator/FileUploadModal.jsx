@@ -1,7 +1,7 @@
-import React from "react";
+import React,{useState} from "react";
 
 const FileUploadModal = ({ isOpen, onClose, onFileUpload }) => {
-  const [file, setFile] = React.useState(null);
+  const [file, setFile] = useState(null);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);

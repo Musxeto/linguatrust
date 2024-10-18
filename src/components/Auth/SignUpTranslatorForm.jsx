@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase";
 import { collection, addDoc } from "firebase/firestore";
-import CreatableSelect from "react-select/creatable"; // Using for languages
+import CreatableSelect from "react-select/creatable"; 
 import { ToastContainer, toast } from "react-toastify";
 
 const SignUpTranslatorForm = ({ setShowSignUpModal }) => {
@@ -19,7 +19,7 @@ const SignUpTranslatorForm = ({ setShowSignUpModal }) => {
         uid: userCredential.user.uid,
         name,
         email,
-        languages: languages.map(lang => lang.value), // Extracting languages
+        languages: languages.map(lang => lang.value), 
         role: "translator",
       });
       toast.success("Account created!");
