@@ -9,6 +9,7 @@
 /client-home  /client-home    200
 /translator/home   /translator/home    200
 /translator/browse   /translator/browse    200
-
+/client/order/:id/chat   /client/order/:id/chat 200
+/transaltor/order/:id/chat   /transaltor/order/:id/chat 200
 # You can also add custom 301 redirects if needed
 # /old-path    /new-path    301
