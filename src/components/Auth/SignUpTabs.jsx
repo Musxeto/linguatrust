@@ -83,6 +83,12 @@ const SignUpTabs = () => {
               Translator
             </button>
           </div>
+          <p className="mt-4 text-center">
+            Already have an account?{" "}
+            <a href="/login" className="text-pink-500">
+              Log In
+            </a>
+          </p>
         </div>
       ) : (
         <form
