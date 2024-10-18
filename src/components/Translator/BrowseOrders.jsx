@@ -8,6 +8,7 @@ import UnAssignedList from "./UnAssignedList";
 import { ClipLoader } from "react-spinners";
 import UnassignedOrderDetailsModal from "./UnassignedOrderDetailsModal";
 import { updateDoc,addDoc,doc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 const languageOptions = [
   { label: "English", value: "English" },
   { label: "Urdu", value: "Urdu" },
@@ -69,7 +70,7 @@ const BrowseOrders = () => {
   const [targetLang, setTargetLang] = useState(null); 
   const { currentUser,userData } = useAuth();
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
+  const navigate = useNavigate()
   useEffect(() => {
     const fetchUnassignedOrders = async () => {
       setLoading(true);
@@ -120,6 +121,7 @@ const BrowseOrders = () => {
       try {
         await updateDoc(doc(db, "orders", selectedOrder.id), updatedOrder);
         toast.success("Order Selected successfully!");
+        navigate("/home")
         closeModal(); 
       } catch (error) {
         toast.error("Failed to update order: " + error.message);
