@@ -194,28 +194,32 @@ const TranslatorChat = () => {
             </div>
           )}
         </div>
-        <div className="flex flex-col items-center mt-4 space-y-2 md:space-y-0 md:space-x-2 p-2 w-full">
-          <input
-            type="text"
-            value={messageInput}
-            onChange={(e) => setMessageInput(e.target.value)}
-            placeholder="Type your message"
-            className="border border-gray-300 p-2 flex-grow rounded-md focus:outline-none focus:ring focus:ring-customPink"
-          />
-          <button
-            onClick={handleSendMessage}
-            className="bg-customPink text-white p-2 rounded-md flex items-center ml-2"
-          >
-            <FaPaperPlane />
-            <span className="ml-2">Send</span>
-          </button>
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="bg-gray-300 p-2 rounded-md flex items-center ml-2"
-          >
-            <FaUpload />
-            <span className="ml-2">Attach File</span>
-          </button>
+        <div className="flex flex-col items-center mt-4 p-2 w-full">
+          <div className="relative w-full">
+            <input
+              type="text"
+              value={messageInput}
+              onChange={(e) => setMessageInput(e.target.value)}
+              placeholder="Type your message"
+              className="border border-gray-300 p-2 pl-10 pr-10 rounded-md focus:outline-none focus:ring focus:ring-customPink w-full"
+            />
+            {/* Upload Icon */}
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="absolute left-3 top-2 text-gray-400 hover:text-customPink"
+            >
+              <FaUpload />
+            </button>
+            {/* Send Button */}
+            {messageInput.trim() && (
+              <button
+                onClick={handleSendMessage}
+                className="absolute right-3 top-2 bg-customPink text-white p-2 rounded-md flex items-center"
+              >
+                <FaPaperPlane />
+              </button>
+            )}
+          </div>
         </div>
 
         {isUploading && (

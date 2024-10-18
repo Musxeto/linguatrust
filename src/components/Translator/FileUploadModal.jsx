@@ -18,7 +18,7 @@ const FileUploadModal = ({ isOpen, onClose, onFileUpload }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="fixed inset-0 flex items-center z-50 justify-center bg-black bg-opacity-50">
       <div className="bg-white p-4 rounded-md">
         <h2 className="text-lg font-bold mb-2">Upload File</h2>
         <input type="file" onChange={handleFileChange} />

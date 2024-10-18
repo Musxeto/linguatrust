@@ -16,12 +16,14 @@ const OrdersList = ({ orders, handleCardClick }) => {
           <p>Status: {order.status}</p>
           <p>Assigned to: {order.translatorName}</p>
           {order.translatorName !== "Unassigned" && (
-            <a
-              href={`/client/order/${order.id}/chat`}
-              className="text-customPink mt-2 flex items-center gap-2"
-            >
-              <FiMessageCircle size={16} /> Chat
-            </a>
+            <button className="mt-2 bg-customBlack text-center w-full text-white p-2 rounded-[6px]">
+              <a
+                href={`/client/order/${order.id}/chat`}
+                className="text-white flex items-center justify-center gap-2"
+              >
+                <FiMessageCircle size={16} /> Chat
+              </a>
+            </button>
           )}
         </div>
       ))}
