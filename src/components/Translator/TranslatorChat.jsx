@@ -194,7 +194,7 @@ const TranslatorChat = () => {
             </div>
           )}
         </div>
-        <div className="flex items-center mt-4 space-x-2 p-2">
+        <div className="flex flex-col md:flex-row items-center mt-4 space-y-2 md:space-y-0 md:space-x-2 p-2">
           <input
             type="text"
             value={messageInput}

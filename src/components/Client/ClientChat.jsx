@@ -45,13 +45,10 @@ const ClientChat = () => {
       };
     };
 
-    
-
     fetchMessages();
-    
   }, [id, messagesRef]);
 
-  useEffect(()=>{
+  useEffect(() => {
     const fetchOrder = async () => {
       setLoadingOrder(true);
       const q = query(collection(db, "orders"), where("id", "==", id));
@@ -73,7 +70,7 @@ const ClientChat = () => {
       return unsubscribe;
     };
     fetchOrder();
-  },[id])
+  }, [id]);
   const handleSendMessage = () => {
     if (messageInput.trim() === "") {
       toast.error("Please enter a message.");
@@ -107,24 +104,27 @@ const ClientChat = () => {
           ) : (
             order && (
               <>
-                <h1 className="text-xl font-bold">
+                <h1 className="text-xl font-bold md:text-2xl">
                   Order - {order.sourceLanguage} to {order.targetLanguage}
                 </h1>
                 <h2 className="text-lg font-bold">
-                  Translator: <span className="text-customPink">{order.translatorName}</span>
+                  Translator:{" "}
+                  <span className="text-customPink">
+                    {order.translatorName}
+                  </span>
                 </h2>
                 <iframe
                   title="PDF Viewer"
                   src={order.documentLink}
                   width="100%"
-                  height="150px"
+                  height="150"
                   className="border-none"
                 />
               </>
             )
           )}
         </div>
-        <div className="message-container flex-1 overflow-y-auto p-2">
+        <div className="message-container flex-1 overflow-y-auto p-4 md:p-2">
           {loadingMessages ? (
             <div className="flex justify-center items-center h-64">
               <ClipLoader size={50} color={"#000"} loading={loadingMessages} />
@@ -132,8 +132,12 @@ const ClientChat = () => {
           ) : (
             <div>
               {messages.map((msg, index) => (
-                <div key={index} className={`mb-2`}>
-                  <div className={`p-2 rounded ${msg.sender === "client" ? "bg-blue-100" : "bg-gray-100"}`}>
+                <div key={index} className="mb-2">
+                  <div
+                    className={`p-2 rounded ${
+                      msg.sender === "client" ? "bg-blue-100" : "bg-gray-100"
+                    }`}
+                  >
                     {msg.text && <p>{msg.text}</p>}
                     {msg.fileUrl && (
                       <a
