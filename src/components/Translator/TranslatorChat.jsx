@@ -194,7 +194,7 @@ const TranslatorChat = () => {
             </div>
           )}
         </div>
-        <div className="flex flex-col md:flex-row items-center mt-4 space-y-2 md:space-y-0 md:space-x-2 p-2">
+        <div className="flex flex-col items-center mt-4 space-y-2 md:space-y-0 md:space-x-2 p-2 w-full">
           <input
             type="text"
             value={messageInput}
@@ -204,19 +204,20 @@ const TranslatorChat = () => {
           />
           <button
             onClick={handleSendMessage}
-            className="bg-customPink text-white p-2 rounded-md flex items-center"
+            className="bg-customPink text-white p-2 rounded-md flex items-center ml-2"
           >
             <FaPaperPlane />
             <span className="ml-2">Send</span>
           </button>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="bg-gray-300 p-2 rounded-md flex items-center"
+            className="bg-gray-300 p-2 rounded-md flex items-center ml-2"
           >
             <FaUpload />
             <span className="ml-2">Attach File</span>
           </button>
         </div>
+
         {isUploading && (
           <div className="flex justify-center p-4">
             <ClipLoader size={30} color={"#000"} loading={isUploading} />
