@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaPaperPlane, FaSpinner, FaUpload } from "react-icons/fa";
-import { realdb, storage, db } from "../../firebase";
-import { ref as sRef, onValue, update } from "firebase/database";
-import { uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { realdb, storage, db } from "../../firebase"; // Ensure these imports are correct
+import { ref as dbRef, onValue, update } from "firebase/database";
+import { ref as sRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import Navbar from "./Navbar";
 import { ClipLoader } from "react-spinners";
@@ -19,58 +19,63 @@ const TranslatorChat = () => {
   const [loadingOrder, setLoadingOrder] = useState(true);
   const messagesEndRef = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUploading, setIsUploading] = useState(false); // New loading state for file upload
 
-  const messagesRef = sRef(realdb, `orders/${id}/messages`);
+  const messagesRef = dbRef(realdb, `orders/${id}/messages`); // Use dbRef for Realtime Database
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const fetchMessages = () => {
+    const unsubscribeMessages = onValue(
+      messagesRef,
+      (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          setMessages(Object.values(data));
+        }
+        setLoadingMessages(false);
+        scrollToBottom();
+      },
+      (error) => {
+        toast.error("Failed to fetch messages: " + error.message);
+        setLoadingMessages(false);
+      }
+    );
+
+    return () => {
+      unsubscribeMessages();
+    };
+  };
+
+  const fetchOrder = async () => {
+    setLoadingOrder(true);
+    const q = query(collection(db, "orders"), where("id", "==", id));
+    const unsubscribe = onSnapshot(
+      q,
+      (querySnapshot) => {
+        const orderData = [];
+        querySnapshot.forEach((doc) => {
+          orderData.push({ id: doc.id, ...doc.data() });
+        });
+        setOrder(orderData[0]);
+        setLoadingOrder(false);
+      },
+      (error) => {
+        toast.error("Failed to fetch order: " + error.message);
+        setLoadingOrder(false);
+      }
+    );
+    return unsubscribe;
+  };
+
   useEffect(() => {
-    const fetchMessages = () => {
-      const unsubscribeMessages = onValue(
-        messagesRef,
-        (snapshot) => {
-          const data = snapshot.val();
-          if (data) {
-            setMessages(Object.values(data));
-          }
-          setLoadingMessages(false);
-          scrollToBottom();
-        },
-        (error) => {
-          toast.error("Failed to fetch messages: " + error.message);
-          setLoadingMessages(false);
-        }
-      );
-
-      return () => {
-        unsubscribeMessages();
-      };
-    };
-
-    const fetchOrder = async () => {
-      setLoadingOrder(true);
-      const q = query(collection(db, "orders"), where("id", "==", id));
-      const unsubscribe = onSnapshot(
-        q,
-        (querySnapshot) => {
-          const orderData = [];
-          querySnapshot.forEach((doc) => {
-            orderData.push({ id: doc.id, ...doc.data() });
-          });
-          setOrder(orderData[0]);
-          setLoadingOrder(false);
-        },
-        (error) => {
-          toast.error("Failed to fetch order: " + error.message);
-          setLoadingOrder(false);
-        }
-      );
-      return unsubscribe;
-    };
-
     fetchMessages();
+    scrollToBottom();
+  }, [id, messagesRef]);
+
+  useEffect(() => {
     fetchOrder();
   }, [id]);
 
@@ -95,36 +100,33 @@ const TranslatorChat = () => {
     scrollToBottom();
   };
 
-  const handleFileUpload = (file) => {
-    const storageRef = sRef(storage, `orders/${id}/${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+  const handleFileUpload = async (file) => {
+    setIsUploading(true); // Set loading state to true before upload
+    const storageRef = sRef(storage, `orders/${id}/${file.name}`); // Use sRef for Storage
 
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        // Handle progress if needed
-      },
-      (error) => {
-        toast.error("File upload failed: " + error.message);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          const newMessage = {
-            fileUrl: downloadURL,
-            fileName: file.name,
-            sender: "translator",
-            timestamp: Date.now(),
-          };
+    try {
+      const uploadTask = await uploadBytes(storageRef, file); // Upload file
+      const downloadURL = await getDownloadURL(uploadTask.ref); // Get download URL
 
-          update(messagesRef, {
-            [newMessage.timestamp]: newMessage,
-          });
+      const newMessage = {
+        fileUrl: downloadURL,
+        fileName: file.name,
+        sender: "translator",
+        timestamp: Date.now(),
+      };
 
-          setMessages((prev) => [...prev, newMessage]);
-          scrollToBottom();
-        });
-      }
-    );
+      await update(messagesRef, {
+        [newMessage.timestamp]: newMessage,
+      });
+
+      setMessages((prev) => [...prev, newMessage]);
+      fetchMessages();
+      scrollToBottom();
+    } catch (error) {
+      toast.error("File upload failed: " + error.message);
+    } finally {
+      setIsUploading(false); // Set loading state to false after upload is complete
+    }
   };
 
   return (
@@ -144,7 +146,9 @@ const TranslatorChat = () => {
                 </h1>
                 <h2 className="text-lg font-bold">
                   Translator:{" "}
-                  <span className="text-customPink">{order.translatorName}</span>
+                  <span className="text-customPink">
+                    {order.translatorName}
+                  </span>
                 </h2>
                 <iframe
                   title="PDF Viewer"
@@ -168,7 +172,9 @@ const TranslatorChat = () => {
                 <div key={index} className={`mb-2`}>
                   <div
                     className={`p-2 rounded ${
-                      msg.sender === "translator" ? "bg-blue-100" : "bg-gray-100"
+                      msg.sender === "translator"
+                        ? "bg-blue-100"
+                        : "bg-gray-100"
                     }`}
                   >
                     {msg.text && <p>{msg.text}</p>}
@@ -212,6 +218,11 @@ const TranslatorChat = () => {
             <span className="ml-2">Attach File</span>
           </button>
         </div>
+        {isUploading && ( // Show spinner while uploading
+          <div className="flex justify-center p-4">
+            <ClipLoader size={30} color={"#000"} loading={isUploading} />
+          </div>
+        )}
       </div>
       <FileUploadModal
         isOpen={isModalOpen}

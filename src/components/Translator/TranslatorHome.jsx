@@ -1,6 +1,7 @@
+// TranslatorHome.jsx
 import React, { useEffect, useState } from "react";
 import { db } from "../../firebase";
-import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { collection, query, where, onSnapshot, updateDoc, doc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { useAuth } from "../../contexts/AuthContext";
 import Navbar from "./Navbar";
@@ -17,7 +18,7 @@ const TranslatorHome = () => {
     const fetchOrders = async () => {
       const q = query(
         collection(db, "orders"),
-        where("translator", "==", currentUser.uid) 
+        where("translator", "==", currentUser.uid)
       );
       const unsubscribe = onSnapshot(
         q,
@@ -47,12 +48,26 @@ const TranslatorHome = () => {
     setSelectedOrder(null);
   };
 
+  const handleUpdateOrderStatus = async (orderId, status) => {
+    try {
+      const orderRef = doc(db, "orders", orderId);
+      await updateDoc(orderRef, { status });
+      toast.success("Order status updated successfully!");
+    } catch (error) {
+      toast.error("Failed to update order status: " + error.message);
+    }
+  };
+
   return (
     <>
       <Navbar />
       <div className="container px-4">
         <h1 className="text-3xl font-bold mb-4">Your Current Orders</h1>
-        <OrdersList orders={orders} handleCardClick={handleCardClick} />
+        <OrdersList
+          orders={orders}
+          handleCardClick={handleCardClick}
+          handleUpdateOrderStatus={handleUpdateOrderStatus} // Pass the update function
+        />
 
         {selectedOrder && (
           <OrderDetailsModal
