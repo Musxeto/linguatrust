@@ -30,7 +30,7 @@ const OrdersList = ({ orders, handleCardClick, handleUpdateOrderStatus }) => {
         orders.map((order) => (
           <div
             key={order.id}
-            className="bg-customWhite shadow-lg rounded-lg p-4 cursor-pointer border border-customPink hover:bg-pink-100 transition-all transition-duration-1000"
+            className="bg-customWhite shadow-lg rounded-[6px] p-4 cursor-pointer border border-customPink hover:bg-pink-100 transition-all transition-duration-1000"
             onClick={() => handleCardClick(order)}
           >
             <h2 className="font-semibold">
@@ -38,7 +38,7 @@ const OrdersList = ({ orders, handleCardClick, handleUpdateOrderStatus }) => {
             </h2>
             <p>Status: {order.status}</p>
             <p>Client: {order.clientName}</p>
-            <button className="mt-2 bg-black text-center w-full text-white p-2 rounded">
+            <button className="mt-2 bg-customBlack text-center w-full text-white p-2 rounded-[6px]">
               <a
                 href={`/translator/order/${order.id}/chat`}
                 className="text-white flex items-center justify-center gap-2"
@@ -49,7 +49,7 @@ const OrdersList = ({ orders, handleCardClick, handleUpdateOrderStatus }) => {
 
             <button
               onClick={() => openModal(order.id)} // Open the moda
-              className="mt-2 bg-customPink text-center w-full text-white p-2 rounded"
+              className="mt-2 bg-customPink text-center w-full text-white p-2 rounded-[6px]"
             >
               Update Status
             </button>
