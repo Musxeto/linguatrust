@@ -45,6 +45,13 @@ const ClientChat = () => {
       };
     };
 
+    
+
+    fetchMessages();
+    
+  }, [id, messagesRef]);
+
+  useEffect(()=>{
     const fetchOrder = async () => {
       setLoadingOrder(true);
       const q = query(collection(db, "orders"), where("id", "==", id));
@@ -65,11 +72,8 @@ const ClientChat = () => {
       );
       return unsubscribe;
     };
-
-    fetchMessages();
     fetchOrder();
-  }, [id, messagesRef]);
-
+  },[id])
   const handleSendMessage = () => {
     if (messageInput.trim() === "") {
       toast.error("Please enter a message.");
