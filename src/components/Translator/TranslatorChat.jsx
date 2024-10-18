@@ -73,7 +73,7 @@ const TranslatorChat = () => {
   useEffect(() => {
     fetchMessages();
     scrollToBottom();
-  }, [id, messagesRef]);
+  }, [id]);
 
   useEffect(() => {
     fetchOrder();
@@ -206,7 +206,7 @@ const TranslatorChat = () => {
             {/* Upload Icon */}
             <button
               onClick={() => setIsModalOpen(true)}
-              className="absolute left-3 top-2 text-gray-400 hover:text-customPink"
+              className="absolute left-3 top-2 align-middle text-gray-400 hover:text-customPink"
             >
               <FaUpload />
             </button>
@@ -214,7 +214,7 @@ const TranslatorChat = () => {
             {messageInput.trim() && (
               <button
                 onClick={handleSendMessage}
-                className="absolute right-3 top-2 bg-customPink text-white p-2 rounded-md flex items-center"
+                className="absolute right-3 align-middle top-2 bg-customPink text-white p-2 rounded-md flex items-center"
               >
                 <FaPaperPlane />
               </button>
