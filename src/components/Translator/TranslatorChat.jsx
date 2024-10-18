@@ -2,25 +2,25 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaPaperPlane, FaSpinner, FaUpload } from "react-icons/fa";
-import { realdb, storage, db } from "../../firebase"; // Firebase Realtime DB, Storage & Firestore
-import { ref, onValue, update } from "firebase/database";
+import { realdb, storage, db } from "../../firebase";
+import { ref as sRef, onValue, update } from "firebase/database";
 import { uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import Navbar from "./Navbar";
 import { ClipLoader } from "react-spinners";
+import FileUploadModal from "./FileUploadModal"; // Import the modal component
 
 const TranslatorChat = () => {
   const { id } = useParams();
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState("");
-  const [file, setFile] = useState(null);
-  const [isUploading, setIsUploading] = useState(false);
   const [loadingMessages, setLoadingMessages] = useState(true);
   const [order, setOrder] = useState(null);
   const [loadingOrder, setLoadingOrder] = useState(true);
   const messagesEndRef = useRef(null);
-  const fileInputRef = useRef();
-  const messagesRef = ref(realdb, `orders/${id}/messages`);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const messagesRef = sRef(realdb, `orders/${id}/messages`);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -95,29 +95,17 @@ const TranslatorChat = () => {
     scrollToBottom();
   };
 
-  const handleFileUpload = (e) => {
-    const selectedFile = e.target.files[0];
-    if (selectedFile) {
-      setFile(selectedFile);
-    }
-  };
-
-  const handleSendFile = () => {
-    if (!file) {
-      toast.error("No file selected.");
-      return;
-    }
-
-    setIsUploading(true);
-    const storageRef = ref(storage, `orderFiles/${id}/${file.name}`);
+  const handleFileUpload = (file) => {
+    const storageRef = sRef(storage, `orders/${id}/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
       "state_changed",
-      () => {},
+      (snapshot) => {
+        // Handle progress if needed
+      },
       (error) => {
         toast.error("File upload failed: " + error.message);
-        setIsUploading(false);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
@@ -133,8 +121,6 @@ const TranslatorChat = () => {
           });
 
           setMessages((prev) => [...prev, newMessage]);
-          setFile(null);
-          setIsUploading(false);
           scrollToBottom();
         });
       }
@@ -157,7 +143,8 @@ const TranslatorChat = () => {
                   Order - {order.sourceLanguage} to {order.targetLanguage}
                 </h1>
                 <h2 className="text-lg font-bold">
-                  Translator: <span className="text-customPink">{order.translatorName}</span>
+                  Translator:{" "}
+                  <span className="text-customPink">{order.translatorName}</span>
                 </h2>
                 <iframe
                   title="PDF Viewer"
@@ -179,7 +166,11 @@ const TranslatorChat = () => {
             <div>
               {messages.map((msg, index) => (
                 <div key={index} className={`mb-2`}>
-                  <div className={`p-2 rounded ${msg.sender === "translator" ? "bg-blue-100" : "bg-gray-100"}`}>
+                  <div
+                    className={`p-2 rounded ${
+                      msg.sender === "translator" ? "bg-blue-100" : "bg-gray-100"
+                    }`}
+                  >
                     {msg.text && <p>{msg.text}</p>}
                     {msg.fileUrl && (
                       <a
@@ -213,33 +204,20 @@ const TranslatorChat = () => {
             <FaPaperPlane />
             <span className="ml-2">Send</span>
           </button>
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleFileUpload}
-            className="hidden"
-          />
           <button
-            onClick={() => fileInputRef.current.click()}
+            onClick={() => setIsModalOpen(true)} // Open the modal
             className="bg-gray-300 p-2 rounded-md flex items-center"
           >
             <FaUpload />
             <span className="ml-2">Attach File</span>
           </button>
-          {file && !isUploading && (
-            <button
-              onClick={handleSendFile}
-              className="bg-green-500 text-white p-2 rounded-md flex items-center"
-            >
-              <FaPaperPlane />
-              <span className="ml-2">Send File</span>
-            </button>
-          )}
-          {isUploading && (
-            <FaSpinner className="animate-spin text-customPink ml-2" />
-          )}
         </div>
       </div>
+      <FileUploadModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onFileUpload={handleFileUpload} // Pass the file upload handler
+      />
     </>
   );
 };
