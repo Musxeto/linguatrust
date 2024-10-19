@@ -38,7 +38,8 @@ const OrdersList = ({ orders, handleCardClick, handleUpdateOrderStatus }) => {
             </h2>
             <p>Status: {order.status}</p>
             <p>Client: {order.clientName}</p>
-            <button className="mt-2 bg-customBlack text-center w-full text-white p-2 rounded-[6px]">
+
+            <button className="mt-6 bg-customBlack text-center w-full text-white p-2 rounded-[6px]">
               <a
                 href={`/translator/order/${order.id}/chat`}
                 className="text-white flex items-center justify-center gap-2"

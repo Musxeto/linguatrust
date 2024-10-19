@@ -16,7 +16,7 @@ const OrdersList = ({ orders, handleCardClick }) => {
           <p>Status: {order.status}</p>
           <p>Assigned to: {order.translatorName}</p>
           {order.translatorName !== "Unassigned" && (
-            <button className="mt-2 bg-customBlack text-center w-full text-white p-2 rounded-[6px]">
+            <button className="mt-6 bg-customBlack text-center w-full text-white p-2 rounded-[6px]">
               <a
                 href={`/client/order/${order.id}/chat`}
                 className="text-white flex items-center justify-center gap-2"
