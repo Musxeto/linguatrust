@@ -12,7 +12,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pd
 import mammoth from "mammoth"; 
 import { useAuth } from "../../contexts/AuthContext";
 
-const COST = 2;
+const COST = 0.2;
 
 const languageOptions = [
   { label: "English", value: "English" },
